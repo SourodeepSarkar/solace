@@ -1,9 +1,13 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+// ============================================================
+// Firebase initialization for Solace
+// Replace firebaseConfig with the values from:
+// Firebase Console → Project Settings → General → Your apps → SDK setup
+// ============================================================
 
-import {
-    getAuth,
-    GoogleAuthProvider
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import { getMessaging, isSupported } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-messaging.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDXGucVOsaCKsL_KuYrUBYjIH5yBvYqt3I",
@@ -15,8 +19,18 @@ const firebaseConfig = {
     measurementId: "G-1DMT95DSFF"
 };
 
-const app = initializeApp(firebaseConfig);
-
+export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-
 export const googleProvider = new GoogleAuthProvider();
+export const db = getFirestore(app);
+
+// Messaging only works on https/localhost + supported browsers, so guard it.
+export let messaging = null;
+isSupported().then((supported) => {
+    if (supported) {
+        messaging = getMessaging(app);
+    }
+});
+
+// VAPID key from Firebase Console → Project Settings → Cloud Messaging → Web Push certificates
+export const VAPID_KEY = "YOUR_VAPID_KEY";

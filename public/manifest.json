@@ -1,0 +1,9 @@
+{
+  "name": "Solace",
+  "short_name": "Solace",
+  "start_url": "dashboard.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#4f46e5",
+  "icons": []
+}

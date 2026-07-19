@@ -4,18 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Solace Dashboard</title>
-
     <link rel="stylesheet" href="style.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
 </head>
 
 <body class="dashboard-body">
 
     <div class="dashboard">
 
-        <aside class="sidebar">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+            <i class='bx bx-menu'></i>
+        </button>
+
+        <aside class="sidebar" id="sidebar">
 
             <div class="logo">
                 <i class='bx bx-leaf'></i>
@@ -23,42 +26,11 @@
             </div>
 
             <nav>
-
-                <a class="active">
-                    <i class='bx bxs-dashboard'></i>
-                    Dashboard
-                </a>
-
-                <a>
-                    <i class='bx bx-check-circle'></i>
-                    Tasks
-                </a>
-
-                <a>
-                    <i class='bx bx-calendar'></i>
-                    Calendar
-                </a>
-
-                <a>
-                    <i class='bx bx-bell'></i>
-                    Reminders
-                </a>
-
-                <a>
-                    <i class='bx bx-note'></i>
-                    Notes
-                </a>
-
-                <a>
-                    <i class='bx bx-bar-chart-alt-2'></i>
-                    Analytics
-                </a>
-
-                <a>
-                    <i class='bx bx-cog'></i>
-                    Settings
-                </a>
-
+                <a class="nav-link active" data-view="dashboard"><i class='bx bxs-dashboard'></i>Dashboard</a>
+                <a class="nav-link" data-view="tasks"><i class='bx bx-check-circle'></i>Tasks</a>
+                <a class="nav-link" data-view="reminders"><i class='bx bx-bell'></i>Reminders</a>
+                <a class="nav-link" data-view="notes"><i class='bx bx-note'></i>Notes</a>
+                <a class="nav-link" data-view="settings"><i class='bx bx-cog'></i>Settings</a>
             </nav>
 
             <button id="logout" class="logout">
@@ -71,76 +43,155 @@
         <main class="content">
 
             <header class="topbar">
-
                 <div>
                     <h1 id="welcomeName">Welcome 👋</h1>
                     <p id="userEmail"></p>
                 </div>
-
+                <span class="sync-pill" id="syncPill"><i class='bx bx-sync'></i> Synced</span>
             </header>
 
             <section class="hero-card">
-
-                <h2>Today's Focus</h2>
-
-                <p>
-                    Nothing scheduled yet.
-                </p>
-
+                <h2 id="heroHeadline">Today's Focus</h2>
+                <p id="heroSub">Nothing scheduled yet.</p>
             </section>
 
-            <section class="grid">
+            <!-- DASHBOARD VIEW -->
+            <section class="view" id="view-dashboard">
+                <div class="grid">
 
-                <div class="card">
+                    <div class="card">
+                        <div class="card-head">
+                            <h3>Tasks</h3>
+                            <button class="link-btn" data-open-modal="task">+ New</button>
+                        </div>
+                        <ul id="taskPreview" class="item-list"><li class="empty">No tasks yet.</li></ul>
+                    </div>
 
-                    <h3>Tasks</h3>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3>Upcoming Reminders</h3>
+                            <button class="link-btn" data-open-modal="reminder">+ New</button>
+                        </div>
+                        <ul id="reminderPreview" class="item-list"><li class="empty">No reminders yet.</li></ul>
+                    </div>
 
-                    <ul id="taskList">
-                        <li>No tasks.</li>
-                    </ul>
+                    <div class="card">
+                        <div class="card-head">
+                            <h3>Quick Notes</h3>
+                            <button class="link-btn" data-open-modal="note">+ New</button>
+                        </div>
+                        <ul id="notePreview" class="item-list"><li class="empty">No notes yet.</li></ul>
+                    </div>
 
-                </div>
-
-                <div class="card">
-
-                    <h3>Upcoming Reminders</h3>
-
-                    <ul id="reminderList">
-                        <li>No reminders.</li>
-                    </ul>
-
-                </div>
-
-                <div class="card">
-
-                    <h3>Quick Notes</h3>
-
-                    <p>No notes yet.</p>
-
-                </div>
-
-                <div class="card">
-
-                    <h3>Quick Actions</h3>
-
-                    <button class="action-btn">
-                        New Task
-                    </button>
-
-                    <button class="action-btn">
-                        New Reminder
-                    </button>
-
-                    <button class="action-btn">
-                        New Note
-                    </button>
+                    <div class="card">
+                        <h3>Quick Actions</h3>
+                        <button class="action-btn" data-open-modal="task">New Task</button>
+                        <button class="action-btn" data-open-modal="reminder">New Reminder</button>
+                        <button class="action-btn" data-open-modal="note">New Note</button>
+                        <button class="action-btn" id="enableNotifs">Enable Notifications</button>
+                    </div>
 
                 </div>
+            </section>
 
+            <!-- TASKS VIEW -->
+            <section class="view hidden" id="view-tasks">
+                <div class="section-head">
+                    <h2>Tasks</h2>
+                    <button class="action-btn small" data-open-modal="task">+ New Task</button>
+                </div>
+                <ul id="taskFullList" class="item-list stacked"></ul>
+            </section>
+
+            <!-- REMINDERS VIEW -->
+            <section class="view hidden" id="view-reminders">
+                <div class="section-head">
+                    <h2>Reminders</h2>
+                    <button class="action-btn small" data-open-modal="reminder">+ New Reminder</button>
+                </div>
+                <p class="hint-text">Location reminders fire while this tab is open (foreground or background). Time reminders can also push a notification via Firebase Cloud Messaging even when Solace is closed, once you enable notifications and the Cloud Function is deployed.</p>
+                <ul id="reminderFullList" class="item-list stacked"></ul>
+            </section>
+
+            <!-- NOTES VIEW -->
+            <section class="view hidden" id="view-notes">
+                <div class="section-head">
+                    <h2>Notes</h2>
+                    <button class="action-btn small" data-open-modal="note">+ New Note</button>
+                </div>
+                <div id="noteGrid" class="grid"></div>
+            </section>
+
+            <!-- SETTINGS VIEW -->
+            <section class="view hidden" id="view-settings">
+                <div class="section-head"><h2>Settings</h2></div>
+                <div class="card" style="max-width:480px">
+                    <h3>Notifications</h3>
+                    <p class="hint-text">Push notifications let time-based reminders reach you even when Solace is closed.</p>
+                    <button class="action-btn" id="enableNotifsSettings">Enable Notifications</button>
+                    <p class="hint-text" id="notifStatus"></p>
+                </div>
             </section>
 
         </main>
 
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay hidden" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-head">
+                <h3 id="modalTitle">New</h3>
+                <button class="icon-btn" id="modalClose"><i class='bx bx-x'></i></button>
+            </div>
+
+            <form id="taskForm" class="modal-form hidden">
+                <input type="hidden" id="taskId">
+                <label>Title<input id="taskTitle" required placeholder="e.g. Finish DBMS assignment"></label>
+                <label>Description<textarea id="taskDesc" rows="3" placeholder="Optional details"></textarea></label>
+                <div class="form-row">
+                    <label>Due date<input id="taskDue" type="date"></label>
+                    <label>Priority
+                        <select id="taskPriority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </label>
+                </div>
+                <button type="submit" class="btn">Save Task</button>
+            </form>
+
+            <form id="reminderForm" class="modal-form hidden">
+                <input type="hidden" id="reminderId">
+                <label>Title<input id="reminderTitle" required placeholder="e.g. Submit assignment"></label>
+                <label>Type
+                    <select id="reminderType">
+                        <option value="time">Time only</option>
+                        <option value="location">Location only</option>
+                        <option value="both">Time + Location</option>
+                    </select>
+                </label>
+                <label id="reminderTimeWrap">Date & time<input id="reminderTime" type="datetime-local"></label>
+                <div id="reminderLocationWrap" class="hidden">
+                    <label>Place label<input id="reminderPlaceLabel" placeholder="e.g. Library, Room 204"></label>
+                    <div class="form-row">
+                        <label>Latitude<input id="reminderLat" type="number" step="any"></label>
+                        <label>Longitude<input id="reminderLng" type="number" step="any"></label>
+                    </div>
+                    <label>Trigger radius (meters)<input id="reminderRadius" type="number" value="150" min="20"></label>
+                    <button type="button" class="link-btn" id="useCurrentLocation"><i class='bx bx-current-location'></i> Use my current location</button>
+                </div>
+                <button type="submit" class="btn">Save Reminder</button>
+            </form>
+
+            <form id="noteForm" class="modal-form hidden">
+                <input type="hidden" id="noteId">
+                <label>Title<input id="noteTitle" required placeholder="e.g. Lecture notes - Networks"></label>
+                <label>Content<textarea id="noteContent" rows="6" placeholder="Write your note..."></textarea></label>
+                <button type="submit" class="btn">Save Note</button>
+            </form>
+        </div>
     </div>
 
     <script type="module" src="js/dashboard.js"></script>

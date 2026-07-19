@@ -1,11 +1,21 @@
 {
   "hosting": {
-    "site": "solace-21d29",
     "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
-    ]
-  }
+      "**/node_modules/**",
+      "functions/**"
+    ],
+    "rewrites": []
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default"
+    }
+  ]
 }
