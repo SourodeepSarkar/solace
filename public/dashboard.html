@@ -4,23 +4,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+
+    <title>Solace Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="dashboard-body">
 
-    <h1>Dashboard</h1>
+    <div class="dashboard">
 
-    onAuthStateChanged(auth, user => {
+        <aside class="sidebar">
 
-    if (!user) {
+            <div class="logo">
+                <i class='bx bx-leaf'></i>
+                <span>Solace</span>
+            </div>
 
-    location.href = "index.html";
+            <nav>
 
-    }
+                <a class="active">
+                    <i class='bx bxs-dashboard'></i>
+                    Dashboard
+                </a>
 
-    }); ̰
-    <button id="logout">Logout</button>
+                <a>
+                    <i class='bx bx-check-circle'></i>
+                    Tasks
+                </a>
+
+                <a>
+                    <i class='bx bx-calendar'></i>
+                    Calendar
+                </a>
+
+                <a>
+                    <i class='bx bx-bell'></i>
+                    Reminders
+                </a>
+
+                <a>
+                    <i class='bx bx-note'></i>
+                    Notes
+                </a>
+
+                <a>
+                    <i class='bx bx-bar-chart-alt-2'></i>
+                    Analytics
+                </a>
+
+                <a>
+                    <i class='bx bx-cog'></i>
+                    Settings
+                </a>
+
+            </nav>
+
+            <button id="logout" class="logout">
+                <i class='bx bx-log-out'></i>
+                Logout
+            </button>
+
+        </aside>
+
+        <main class="content">
+
+            <header class="topbar">
+
+                <div>
+                    <h1 id="welcomeName">Welcome 👋</h1>
+                    <p id="userEmail"></p>
+                </div>
+
+            </header>
+
+            <section class="hero-card">
+
+                <h2>Today's Focus</h2>
+
+                <p>
+                    Nothing scheduled yet.
+                </p>
+
+            </section>
+
+            <section class="grid">
+
+                <div class="card">
+
+                    <h3>Tasks</h3>
+
+                    <ul id="taskList">
+                        <li>No tasks.</li>
+                    </ul>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>Upcoming Reminders</h3>
+
+                    <ul id="reminderList">
+                        <li>No reminders.</li>
+                    </ul>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>Quick Notes</h3>
+
+                    <p>No notes yet.</p>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>Quick Actions</h3>
+
+                    <button class="action-btn">
+                        New Task
+                    </button>
+
+                    <button class="action-btn">
+                        New Reminder
+                    </button>
+
+                    <button class="action-btn">
+                        New Note
+                    </button>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
     <script type="module" src="js/dashboard.js"></script>
 
 </body>

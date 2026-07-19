@@ -9,16 +9,23 @@ onAuthStateChanged(auth, (user) => {
 
     if (!user) {
 
-        window.location.href = "index.html";
+        location.href = "index.html";
         return;
 
     }
 
-    console.log(user.displayName);
-    console.log(user.email);
+    document.getElementById("welcomeName").textContent =
+        `Welcome, ${user.displayName ?? "User"} 👋`;
+
+    document.getElementById("userEmail").textContent =
+        user.email;
 
 });
 
 document
     .getElementById("logout")
-    .onclick = () => signOut(auth);
+    .addEventListener("click", () => {
+
+        signOut(auth);
+
+    });
