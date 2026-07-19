@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 * {
     margin: 0;
@@ -100,6 +100,59 @@ body {
     font-weight: 600;
     color: #333;
     cursor: pointer;
+}
+
+/* ---------- Divider ---------- */
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 15px 0;
+}
+
+.divider hr {
+    flex: 1;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, .25);
+}
+
+.divider span {
+    color: rgba(255, 255, 255, .75);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+/* ---------- Google Button ---------- */
+
+.google-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    background: rgba(255, 255, 255, .15) !important;
+    color: white !important;
+    border: 2px solid rgba(255, 255, 255, .2) !important;
+    backdrop-filter: blur(10px);
+
+    transition: .25s ease;
+}
+
+.google-btn:hover {
+    background: rgba(255, 255, 255, .25) !important;
+    transform: translateY(-2px);
+}
+
+.google-btn i {
+    font-size: 22px;
+    color: #EA4335;
+}
+
+.google-btn span {
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .wrapper .register-link {
