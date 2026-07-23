@@ -11,7 +11,7 @@ import {
     doc, setDoc, getDoc, serverTimestamp, collection, getCountFromServer
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-const MAX_ACCOUNTS = 5;
+const MAX_ACCOUNTS = 10; // Maximum number of user accounts allowed
 const form = document.getElementById("registerForm");
 const registerBtn = document.getElementById("registerBtn");
 const hint = document.getElementById("formHint");
