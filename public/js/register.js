@@ -1,4 +1,5 @@
 import { auth, googleProvider, db } from "./firebase.js";
+import { toast } from "./toast.js";
 
 import {
     createUserWithEmailAndPassword,
@@ -7,15 +8,18 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
-    doc,
-    setDoc,
-    getDoc,
-    serverTimestamp,
-    collection,
-    getCountFromServer
+    doc, setDoc, getDoc, serverTimestamp, collection, getCountFromServer
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const MAX_ACCOUNTS = 5;
+const form = document.getElementById("registerForm");
+const registerBtn = document.getElementById("registerBtn");
+const hint = document.getElementById("formHint");
+
+function setLoading(loading, label) {
+    registerBtn.disabled = loading;
+    registerBtn.textContent = loading ? "One moment…" : label;
+}
 
 async function seatsAvailable() {
     const snap = await getCountFromServer(collection(db, "users"));
@@ -34,8 +38,6 @@ async function createProfileIfMissing(user, name) {
     }
 }
 
-const form = document.getElementById("registerForm");
-
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -43,10 +45,11 @@ form.addEventListener("submit", async (e) => {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
 
+    setLoading(true, "Create account");
     try {
         if (!(await seatsAvailable())) {
-            document.getElementById("formHint").textContent =
-                `All ${MAX_ACCOUNTS} seats are taken. Ask an existing member for access.`;
+            hint.textContent = `All ${MAX_ACCOUNTS} seats are taken. Ask an existing member for access.`;
+            setLoading(false, "Create account");
             return;
         }
 
@@ -56,15 +59,15 @@ form.addEventListener("submit", async (e) => {
 
         location.href = "dashboard.html";
     } catch (err) {
-        alert(friendlyAuthError(err));
+        toast(friendlyAuthError(err), "error");
+        setLoading(false, "Create account");
     }
 });
 
 document.getElementById("googleRegister").addEventListener("click", async () => {
     try {
         if (!(await seatsAvailable())) {
-            document.getElementById("formHint").textContent =
-                `All ${MAX_ACCOUNTS} seats are taken. Ask an existing member for access.`;
+            hint.textContent = `All ${MAX_ACCOUNTS} seats are taken. Ask an existing member for access.`;
             return;
         }
 
@@ -73,7 +76,7 @@ document.getElementById("googleRegister").addEventListener("click", async () => 
 
         location.href = "dashboard.html";
     } catch (err) {
-        alert(friendlyAuthError(err));
+        toast(friendlyAuthError(err), "error");
     }
 });
 

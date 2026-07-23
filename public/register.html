@@ -9,38 +9,43 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="auth-body">
 
-    <div class="wrapper">
+    <div class="auth-card">
+        <div class="auth-brand"><i class='bx bx-leaf'></i><span>Solace</span></div>
+
         <form id="registerForm">
-            <h1>Register</h1>
+            <h1>Create your account</h1>
 
-            <div class="input-box">
-                <input id="name" type="text" placeholder="Full name" required>
-                <i class="bx bxs-id-card"></i>
+            <div class="field">
+                <label for="name">Full name</label>
+                <div class="input-shell">
+                    <input id="name" type="text" placeholder="Ada Lovelace" required autocomplete="name">
+                    <i class="bx bxs-id-card"></i>
+                </div>
             </div>
 
-            <div class="input-box">
-                <input id="email" type="email" placeholder="Email" required>
-                <i class="bx bxs-user"></i>
+            <div class="field">
+                <label for="email">Email</label>
+                <div class="input-shell">
+                    <input id="email" type="email" placeholder="you@college.edu" required autocomplete="email">
+                    <i class="bx bxs-user"></i>
+                </div>
             </div>
 
-            <div class="input-box">
-                <input id="password" type="password" placeholder="Password (min 6 characters)" required minlength="6">
-                <i class="bx bxs-lock-alt"></i>
+            <div class="field">
+                <label for="password">Password</label>
+                <div class="input-shell">
+                    <input id="password" type="password" placeholder="At least 6 characters" required minlength="6" autocomplete="new-password">
+                    <i class="bx bxs-lock-alt"></i>
+                </div>
             </div>
 
-            <p class="form-hint" id="formHint">Solace is currently invite-only for up to 5 accounts.</p>
+            <p class="form-hint" id="formHint">Solace is invite-only for up to 5 accounts.</p>
 
-            <button type="submit" class="btn">
-                Create account
-            </button>
+            <button type="submit" class="btn" id="registerBtn">Create account</button>
 
-            <div class="divider">
-                <hr>
-                <span>OR</span>
-                <hr>
-            </div>
+            <div class="divider"><hr><span>OR</span><hr></div>
 
             <button type="button" id="googleRegister" class="btn google-btn">
                 <i class="bx bxl-google"></i>
@@ -48,14 +53,12 @@
             </button>
 
             <div class="register-link">
-                <p>
-                    Already have an account?
-                    <a href="index.html">Login</a>
-                </p>
+                Already have an account? <a href="index.html">Log in</a>
             </div>
         </form>
-
     </div>
+
+    <div class="toast-stack" id="toastStack"></div>
 
     <script type="module" src="js/register.js"></script>
 

@@ -25,21 +25,46 @@ can hold. If you need true "closed app" location triggers, that requires
 building a native Android/iOS app instead of a website; a web dashboard
 can't do it. This build gives you the honest maximum for a website.
 
+## What's in the UI now
+
+- **Kanban board** for tasks (To do / In progress / Done) with drag-and-drop
+  between columns, priority dots, due-date chips (overdue/today highlighted)
+- **Edit everything** — click any task, reminder, or note to edit it in
+  place, not just create/delete
+- **Search** on both the Tasks and Notes views
+- **Light/dark mode**, toggle in the sidebar or Settings, remembered per
+  device
+- **Toasts** instead of browser `alert()` popups, plus a proper confirm
+  dialog before deletes
+- **Week strip** on the dashboard showing which of the next 7 days have
+  tasks or reminders due
+- **Stat pills + sync indicator** so you always know it's live and how much
+  is on your plate
+- Fully responsive: collapsible sidebar drawer on mobile, touch-friendly
+  targets
+
 ## Project structure
 
 ```
-index.html                 login
-register.html               sign up (capped at 5 accounts)
-dashboard.html               main app
-style.css                    shared styling
-manifest.json                 PWA manifest (lets you "install" it on phone)
-firebase-messaging-sw.js       service worker, handles push when tab is closed
-js/firebase.js                 Firebase config — put your keys here
-js/auth.js, js/register.js, js/dashboard.js
-functions/index.js             scheduled Cloud Function for push reminders
-firestore.rules                 security rules (owner-only data access)
-firebase.json                    hosting/firestore/functions config
+firebase.json                 hosting/firestore/functions config
+firestore.rules                security rules (owner-only data access)
+functions/index.js              scheduled Cloud Function for push reminders
+public/
+├── index.html                  login
+├── register.html                sign up (capped at 5 accounts)
+├── dashboard.html                main app (dashboard/tasks/reminders/notes/settings)
+├── style.css                     design system — tokens, light/dark theme, motion
+├── manifest.json                  PWA manifest (lets you "install" it on phone)
+├── firebase-messaging-sw.js        service worker, handles push when tab is closed
+└── js/
+    ├── firebase.js                 Firebase config — put your keys here
+    ├── toast.js                     shared toast notification helper
+    ├── auth.js, register.js, dashboard.js
 ```
+
+`firebase.json` points hosting at the `public/` folder — keep every
+browser-facing file inside it, since anything outside `public/` won't be
+deployed or reachable by the browser.
 
 ## Setup
 

@@ -1,4 +1,5 @@
 import { auth, googleProvider } from "./firebase.js";
+import { toast } from "./toast.js";
 
 import {
     signInWithEmailAndPassword,
@@ -11,12 +12,16 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 onAuthStateChanged(auth, (user) => {
-    if (user) {
-        location.href = "dashboard.html";
-    }
+    if (user) location.href = "dashboard.html";
 });
 
 const form = document.getElementById("loginForm");
+const loginBtn = document.getElementById("loginBtn");
+
+function setLoading(btn, loading, label) {
+    btn.disabled = loading;
+    btn.textContent = loading ? "One moment…" : label;
+}
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -25,16 +30,14 @@ form.addEventListener("submit", async (e) => {
     const password = document.getElementById("password").value;
     const remember = document.getElementById("remember").checked;
 
+    setLoading(loginBtn, true, "Log in");
     try {
-        await setPersistence(
-            auth,
-            remember ? browserLocalPersistence : browserSessionPersistence
-        );
-
+        await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
         await signInWithEmailAndPassword(auth, email, password);
         location.href = "dashboard.html";
     } catch (err) {
-        alert(friendlyAuthError(err));
+        toast(friendlyAuthError(err), "error");
+        setLoading(loginBtn, false, "Log in");
     }
 });
 
@@ -43,7 +46,7 @@ document.getElementById("googleLogin").addEventListener("click", async () => {
         await signInWithPopup(auth, googleProvider);
         location.href = "dashboard.html";
     } catch (err) {
-        alert(friendlyAuthError(err));
+        toast(friendlyAuthError(err), "error");
     }
 });
 
@@ -51,16 +54,13 @@ document.getElementById("forgotPassword").addEventListener("click", async (e) =>
     e.preventDefault();
 
     const email = document.getElementById("email").value;
-    if (!email) {
-        alert("Enter your email first.");
-        return;
-    }
+    if (!email) { toast("Enter your email first.", "info"); return; }
 
     try {
         await sendPasswordResetEmail(auth, email);
-        alert("Password reset email sent.");
+        toast("Password reset email sent.", "success");
     } catch (err) {
-        alert(friendlyAuthError(err));
+        toast(friendlyAuthError(err), "error");
     }
 });
 
